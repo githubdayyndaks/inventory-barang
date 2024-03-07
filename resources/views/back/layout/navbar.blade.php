@@ -131,7 +131,9 @@
                         </div>
                         <div class="col-auto">
                             <!-- Tombol Hapus -->
-                            <a href="#" class="text-dark">
+                            @if (auth()->user()->level != 'pengguna')
+                            <a href="{{url('persetujuan')}}" class="text-dark">
+                            @endif
                                 <small>{{$notification->created_at}}</small> <br>
                                 <small onclick="hapusNotifikasi('{{ $notification->id }}')">Hapus</small>
 
