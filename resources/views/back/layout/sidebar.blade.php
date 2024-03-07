@@ -123,14 +123,14 @@
             </li>
             @endif
             <li class="menu-title mt-2">Apps</li>
-
+            @if (auth()->user()->level != 'pengguna')
             <li>
                 <a href="{{url('peminjaman')}}" >
                     <i class="mdi mdi-text-box-search"></i>
                     <span> Peminjaman barang </span>
                 </a>
             </li>
-            @if (auth()->user()->level != 'pengguna')
+           
             <li>
                 <a href="{{url('persetujuan')}}" >
                     <i class="mdi mdi-text-box-search"></i>

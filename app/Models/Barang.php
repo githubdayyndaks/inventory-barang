@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Events\PeminjamanCreated;
+use Illuminate\Support\Facades\Event;
 class Barang extends Model
 {
     use HasFactory;
@@ -49,4 +51,15 @@ class Barang extends Model
     public function User(): BelongsTo{
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    protected static function boot()
+{
+    parent::boot();
+
+    static::created(function ($barang) {
+        // Panggil event PeminjamanCreated
+        event(new PeminjamanCreated($barang));
+    });
+}
+
 }

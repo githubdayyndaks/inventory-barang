@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Back;
 
+use App\Events\BarangCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Request\BarangRequest;
 use App\Http\Requests\Request\BarangUpdateRequest;
 use App\Models\Barang;
 use App\Models\Kategori;
+use App\Models\Peminjaman;
 use App\Models\Ruangan;
 use App\Models\Subkategori;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Back\NotifikasiController;
+use Illuminate\Support\Facades\Auth; // Import the Auth facade
 
 class BarangController extends Controller
 {
@@ -98,6 +102,13 @@ class BarangController extends Controller
     
         return redirect(url('barang'))->with('success', 'Data Barang has been created'); 
     }
+
+    protected $notifikasiController;
+
+    public function __construct(NotifikasiController $notifikasiController)
+    {
+        $this->notifikasiController = $notifikasiController;
+    }
     
 
     public function edit($kode_barang){
@@ -137,4 +148,46 @@ class BarangController extends Controller
             ], 404); // Return 404 Not Found jika data tidak ditemukan
         }
     }
+
+    public function pinjam(Request $request)
+{
+    // Validasi data yang diterima dari formulir
+    $request->validate([
+        'kode_barang' => 'required|exists:barang,kode_barang', // Pastikan kode barang yang diterima ada dalam tabel barang
+        'jumlah_barang' => 'nullable|integer|min:1', // Validasi jumlah barang yang dipinjam, boleh null, integer, minimal 1
+    ]);
+
+    // Ambil data kode barang dari formulir
+    $kode_barang = $request->input('kode_barang');
+
+    // Ambil data jumlah barang dari formulir, jika tidak tersedia, gunakan default 1
+    $jumlah_barang = $request->input('jumlah_barang', 1);
+
+    // Lakukan proses peminjaman barang
+    $barang = Barang::where('kode_barang', $kode_barang)->firstOrFail();
+
+    // Simpan informasi peminjaman ke dalam tabel peminjaman
+    Peminjaman::create([
+        'id_user' => Auth::id(), // User ID who is borrowing the item
+        'nama_peminjam' => Auth::user()->name, // Borrower's name (username)
+        'kode_barang' => $barang->kode_barang,
+        'nama_barang' => $barang->nama_barang,
+        'ruangan' => $barang->ruangan->nama_ruangan,
+        'kategori' => $barang->kategori->nama_kategori,
+        'subkategori' => $barang->subkategori->nama_subkategori,
+        'merk' => $barang->merk,
+        'jenis' => $barang->jenis,
+        'kondisi' => $barang->kondisi,
+        'bahan' => $barang->bahan,
+        'ukuran' => $barang->ukuran,
+        'jumlah_barang' => $jumlah_barang, // Menggunakan nilai jumlah barang dari formulir atau default 1 jika tidak disediakan
+        // Tambahkan kolom lain yang ingin Anda simpan dalam tabel peminjaman
+    ]);
+
+    event(new BarangCreated($barang));
+    // Redirect kembali ke halaman sebelumnya dengan pesan sukses
+    return redirect()->back()->with('success', 'Barang dengan kode ' . $barang->kode_barang . ' (' . $barang->nama_barang . ') berhasil dipinjam oleh ' . Auth::user()->name . ' sebanyak ' . $jumlah_barang . ' dari ruangan ' . $barang->ruangan->nama_ruangan . '.');
+}
+
+
 }

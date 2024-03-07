@@ -55,6 +55,8 @@ Route::middleware(['auth'])->group(function(){
     route::resource('/subkategori', SubkategoriController::class);
     Route::resource('/persetujuan', PersetujuanController::class);
 
+Route::post('/pinjam/barang', [BarangController::class, 'pinjam'])->name('pinjam.barang');
+
     Route::resource('/peminjaman', PeminjamanController::class);
     Route::put('/peminjaman/{id}', [PeminjamanController::class, 'update']);
     Route::post('/peminjaman/simpan', [PeminjamanController::class, 'simpan'])->name('peminjaman.simpan');

@@ -119,7 +119,15 @@
                                                         @endif
                                                         <a href="{{ url('barang/'.$item->kode_barang) }}" class="btn btn-info mb-2">
                                                             <span class="icon"><i class="mdi mdi-eye"></i></span> Detail
-                                                        </a>       
+                                                        </a>
+                                                        <form action="{{ route('pinjam.barang') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="kode_barang" value="{{ $item->kode_barang }}">
+                                                            <button type="submit" class="btn btn-success mb-2">
+                                                                <span class="icon"><i class="mdi mdi-bookmark"></i></span> Pinjam
+                                                            </button>
+                                                        </form>
+                                                           
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -233,6 +241,42 @@
     }
     
       </script>
+      <script>
+        function pinjamBarang(kodeBarang) {
+            // Kirim permintaan AJAX untuk menyimpan data peminjaman
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'POST',
+                url: '/pinjam',
+                data: {
+                    kode_barang: kodeBarang
+                },
+                dataType: "json",
+                success: function (response) {
+                    // Tampilkan pesan sukses jika permintaan berhasil
+                    Swal.fire({
+                        title: "Success",
+                        text: response.message,
+                        icon: 'success',
+                    }).then((result) => {
+                        // Redirect ke halaman barang setelah menekan tombol "OK"
+                        window.location.href = '{{ url('barang') }}';
+                    });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    // Tampilkan pesan error jika permintaan gagal
+                    Swal.fire({
+                        title: "Error",
+                        text: xhr.responseText,
+                        icon: 'error',
+                    });
+                }
+            });
+        }
+    </script>
+    
        @endpush
 
  {{-- sweetalert2  --}}

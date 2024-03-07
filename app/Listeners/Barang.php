@@ -1,21 +1,13 @@
 <?php
 
-namespace App\Events;
+namespace App\Listeners;
+use App\Events\BarangCreated;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
-use App\Models\Peminjaman;
-use App\Models\Barang;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
-
-class PeminjamanCreated
+class SendPeminjamanNotification
 {
-
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $peminjaman;
-
-    public function handle(PeminjamanCreated $event)
+    public function handle(BarangCreated $event)
     {
         // Lakukan logika notifikasi untuk peminjaman barang yang terjadi pada model Barang
         $barang = $event->barang;
@@ -27,4 +19,3 @@ class PeminjamanCreated
         session()->put('jumlah_notifikasi', session()->get('jumlah_notifikasi', 0) + 1);
     }
 }
-
