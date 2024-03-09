@@ -98,6 +98,7 @@
                                                 {{-- @dd($ruangan); --}}
                                                 @foreach ($peminjaman as $index => $item)
                                                 <tr>
+                                                    @if ($item->status != 'dikembalikan')
                                                     <td>{{ $index + 1 }}</td>
                                                     <td>{{ $item->nama_peminjam}}</td>
                                                     <td>{{$item->nama_barang}}</td>
@@ -114,14 +115,14 @@
                                                     <td class="text-center">
                                                         
                                                                 <!-- Tombol Edit -->
-            @if(auth()->user()->isAdmin() || auth()->user()->isPetugas() || $item->id_user === auth()->user()->id_user)
+            @if(auth()->user()->level == 'admin' || auth()->user()->level == 'petugas')
             <a href="{{ url('peminjaman/'.$item->id_peminjam.'/edit') }}" class="btn btn-warning mb-2">
                 <span class="icon"><i class="mdi mdi-pencil"></i></span> Edit
             </a>
         @endif
 
         <!-- Tombol Delete -->
-        @if(auth()->user()->isAdmin() || auth()->user()->isPetugas() || $item->id_user === auth()->user()->id_user)
+        @if(auth()->user()->level == 'admin' || auth()->user()->level == 'petugas')
             <a href="#" onclick="deletePeminjaman(this)" data-id="{{ $item->id_peminjam }}"  class="btn btn-danger mb-2">
                 <span class="icon"><i class="mdi mdi-trash-can"></i></span> Delete
             </a>
@@ -141,6 +142,7 @@
                                                     @endif
                                                     
                                                     </td>
+                                                    @endif
                                                 </tr>
                                                 @endforeach
                                             </tbody>

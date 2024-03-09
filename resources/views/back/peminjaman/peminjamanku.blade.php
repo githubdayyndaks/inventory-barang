@@ -53,9 +53,9 @@
                                             Kelola Data Peminjaman
                                         </p>
                                         
-                                        <a href="{{url('peminjaman/create')}}" class="btn btn-primary mb-2">
+                                        {{-- <a href="{{url('peminjaman/create')}}" class="btn btn-primary mb-2">
                                             <span class="icon"><i class="mdi mdi-pencil"></i></span> Tambah Peminjaman</a>
-                                   
+                                    --}}
     
                                         @if ($errors->any())
                                         <div class="my-3">
@@ -113,7 +113,7 @@
                                            <td>{{ $item->status }}</td>
                                            <td class="text-center">
                                                
-                                                       <!-- Tombol Edit -->
+                                                       {{-- <!-- Tombol Edit -->
    @if(auth()->user()->isAdmin() || auth()->user()->isPetugas() || $item->id_user === auth()->user()->id_user)
    <a href="{{ url('peminjaman/'.$item->id_peminjam.'/edit') }}" class="btn btn-warning mb-2">
        <span class="icon"><i class="mdi mdi-pencil"></i></span> Edit
@@ -125,20 +125,20 @@
    <a href="#" onclick="deletePeminjaman(this)" data-id="{{ $item->id_peminjam }}"  class="btn btn-danger mb-2">
        <span class="icon"><i class="mdi mdi-trash-can"></i></span> Delete
    </a>
-@endif
+@endif --}}
 
 
                                                <a href="{{ url('peminjaman/'.$item->id_peminjam) }}" class="btn btn-info mb-2">
                                                    <span class="icon"><i class="mdi mdi-eye"></i></span> Detail
                                                </a>    
                                                
-                                               @if ($item->status == 'dipinjam'  )
+                                          
                                                <!-- Tombol Kembalikan hanya ditampilkan saat status peminjaman adalah 'Dipinjam' -->
                                                <a class="btn btn-info mb-2 kembalikan-btn" data-id-peminjam="{{ $item->id_peminjam }}">
                                                    <span class="icon"><i class="mdi mdi-eye"></i></span> Kembalikan
                                                </a>
                                                
-                                           @endif
+                                      
                                            
                                            </td>
                                        </tr>

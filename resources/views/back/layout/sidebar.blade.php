@@ -123,14 +123,15 @@
             </li>
             @endif
             <li class="menu-title mt-2">Apps</li>
-            @if (auth()->user()->level != 'pengguna')
+            @if (auth()->user()->level == 'pengguna')
             <li>
                 <a href="{{url('peminjaman')}}" >
                     <i class="mdi mdi-text-box-search"></i>
-                    <span> Peminjaman barang </span>
+                    <span> Peminjamanku </span>
                 </a>
             </li>
-           
+           @endif
+           @if (auth()->user()->level != 'pengguna')
             <li>
                 <a href="{{url('persetujuan')}}" >
                     <i class="mdi mdi-text-box-search"></i>
@@ -138,14 +139,6 @@
                 </a>
             </li>
            @endif
-            @if (auth()->user()->level == 'pengguna')
-            <li>
-                <a href="{{url('peminjamanku')}}" >
-                    <i class="mdi mdi-text-box-search"></i>
-                    <span> Peminjamanku </span>
-                </a>
-            </li>
-            @endif
             <li class="menu-title mt-2">Pengaturan</li>
 
             <li>

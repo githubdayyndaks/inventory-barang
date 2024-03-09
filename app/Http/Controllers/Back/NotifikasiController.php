@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use App\Models\Peminjaman;
+use App\Models\Barang;
 use Illuminate\Support\Facades\Session;
 
 

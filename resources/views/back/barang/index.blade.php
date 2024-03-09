@@ -89,8 +89,8 @@
                                                 <th>Subkategori</th>
                                                 <th>Merk</th>
                                                 <th>Jenis</th>
-                                                <th>kondisi</th>
-                                                <th>Function</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -105,7 +105,15 @@
                                                     <td>{{$item->subkategori->nama_subkategori}}</td>
                                                     <td>{{$item->merk}}</td>
                                                     <td>{{$item->jenis}}</td>
-                                                    <td>{{$item->kondisi}}</td>
+                                                    
+                                                    <td>@if ($item->peminjaman->status == 'dikembalikan' || $item->peminjaman->status == 'ditolak')
+                                                        Tersedia
+                                                        @else
+                                                        {{$item->peminjaman->status}}
+                                                        @endif
+                                                        
+                                                    </td>
+                                                    
                                                     <td class="text-center">                                                 
                                                         @if (auth()->user()->level == 'admin' || auth()->user()->level == 'petugas')
                                                         <a href="{{url('barang/'.$item->kode_barang.'/edit')}}" class="btn btn-warning mb-2 ">
@@ -120,6 +128,8 @@
                                                         <a href="{{ url('barang/'.$item->kode_barang) }}" class="btn btn-info mb-2">
                                                             <span class="icon"><i class="mdi mdi-eye"></i></span> Detail
                                                         </a>
+                                                        @if (auth()->user()->level == 'pengguna')
+                                                        @if ($item->peminjaman->status == 'dikembalikan' || $item->peminjaman->status == 'ditolak')
                                                         <form action="{{ route('pinjam.barang') }}" method="POST">
                                                             @csrf
                                                             <input type="hidden" name="kode_barang" value="{{ $item->kode_barang }}">
@@ -127,7 +137,8 @@
                                                                 <span class="icon"><i class="mdi mdi-bookmark"></i></span> Pinjam
                                                             </button>
                                                         </form>
-                                                           
+                                                        @endif
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @endforeach

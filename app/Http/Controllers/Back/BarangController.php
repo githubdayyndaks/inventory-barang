@@ -184,7 +184,7 @@ class BarangController extends Controller
         // Tambahkan kolom lain yang ingin Anda simpan dalam tabel peminjaman
     ]);
 
-    event(new BarangCreated($barang));
+    // event(new BarangCreated($barang));
     // Redirect kembali ke halaman sebelumnya dengan pesan sukses
     return redirect()->back()->with('success', 'Barang dengan kode ' . $barang->kode_barang . ' (' . $barang->nama_barang . ') berhasil dipinjam oleh ' . Auth::user()->name . ' sebanyak ' . $jumlah_barang . ' dari ruangan ' . $barang->ruangan->nama_ruangan . '.');
 }
